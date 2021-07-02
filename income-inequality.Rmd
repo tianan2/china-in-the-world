@@ -1,0 +1,48 @@
+---
+title: "china-inequality"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+
+swiid_raw <- read_csv("~/Downloads/dataverse_files (1)/swiid9_1/swiid9_1_summary.csv")
+
+```
+
+gini_disp: estimate of gini index of inequality in equavalized (square root scale) household disposable (post-tax, post-transfer) income; 
+gini_mkt: estimate of gini index of inequality in equavalized (square root scale) household market (pre-tax, pre-transfer) income
+
+```{r}
+swiid_raw %>%
+  filter(country %in% c("China", "United States", "Japan", "Korea")) %>% 
+  pivot_longer(cols = c(gini_disp, gini_mkt), names_to = "category") %>% 
+  mutate(category = fct_recode(category, "Gini disposable income (post-tax and post-transfer)" = "gini_disp", 
+                               "Gini market income (pre-tax and pre-transfer)" = "gini_mkt"), 
+         category = fct_relevel(category, "Gini market income (pre-tax and pre-transfer)")) %>% 
+  ggplot(aes(year, value, color = category)) +
+  geom_point(alpha = .8) +
+  geom_line(size = 1) +
+  scale_y_continuous(limits = c(20, 55), 
+                     breaks = seq(20, 55, 5)) +
+  facet_wrap(~ country) +
+  labs(title = "Gini index for China and others, pre- and post-transfers, 1980-2019", 
+       subtitle = "Impact of social transfers",
+       x = NULL, 
+       y = NULL, 
+       color = NULL, 
+       caption = "Data source: Standardized World Income Inequality Database, version 9.1") +
+  theme_bw() +
+  theme(legend.position = "bottom", 
+        text = element_text(family = "Times"), 
+        plot.title = element_text(face = "bold"))
+
+ggsave(filename = "figs/impact-social-transfers.pdf", width = 8, height = 5)
+  
+```
+
