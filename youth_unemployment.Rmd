@@ -1,0 +1,47 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(WDI)
+library(scales)
+theme_set(theme_classic())
+
+WDIsearch('unemployment') %>% 
+  tbl_df()
+
+```
+
+
+```{r}
+youth_national_raw <- WDI(indicator = "SL.UEM.1524.NE.ZS", country = "all", start = 1960, end = 2020) %>% rename("value" = "SL.UEM.1524.NE.ZS")
+
+youth_ilo_raw <- WDI(indicator = "SL.UEM.1524.ZS", country = "all", start = 1960, end = 2020) %>% rename("value" = "SL.UEM.1524.ZS")
+```
+
+
+```{r}
+youth_ilo_raw %>% 
+  filter(country == "China") %>% 
+  ggplot(aes(year, value)) +
+  geom_point(alpha = .8) +
+  geom_line(size = 1.2) +
+  scale_x_continuous(limits = c(1990, 2020), 
+                     breaks = seq(1990, 2020, 5)) +
+  scale_y_continuous(limits = c(0, 13)) +
+  labs(title = "Youth (aged 18-24) unemployment rate in China (1991-2019)", 
+       subtitle = "ILO standard", 
+       x = NULL, 
+       y = "Unemployment rate (%)") +
+  theme(text = element_text(family = "Times"), 
+        plot.title = element_text(face = "bold"))
+ggsave(filename = "figs/youth_unemployment_china_over_time.pdf", width = 8, height = 5)
+```
+
+

@@ -1,0 +1,33 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(WDI)
+library(scales)
+theme_set(theme_classic())
+
+WDIsearch('government transfer') %>% 
+  tbl_df()
+
+```
+
+
+```{r}
+transfer_poor40_raw <- WDI(indicator = "fin37.t.a.9", country = "all", start = 1960, end = 2020) %>% rename("value" = "fin37.t.a.9")
+```
+
+
+```{r}
+transfer_poor40_raw %>% 
+  filter(country == "China")
+```
+
+
+

@@ -12,11 +12,15 @@ library(tidyverse)
 theme_set(theme_light())
 
 swiid_raw <- read_csv("~/Downloads/dataverse_files (1)/swiid9_1/swiid9_1_summary.csv")
-
 ```
 
 gini_disp: estimate of gini index of inequality in equavalized (square root scale) household disposable (post-tax, post-transfer) income; 
 gini_mkt: estimate of gini index of inequality in equavalized (square root scale) household market (pre-tax, pre-transfer) income
+
+A transfer payment refers to a "one-way payment" to a person or organization which has given or exchanged no goods or services for it. This contrasts with a simple "payment," which in economics refers to a transfer of money in exchange for a product or service. 
+
+Generally, the phrase "transfer payment" is used to describe government payments to individuals through social programs such as welfare, student grants, and even Social Security. However, government payments to corporations—including unconditional bailouts and subsidies—are not commonly described as transfer payments.
+
 
 ```{r}
 swiid_raw %>%
